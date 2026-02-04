@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>AI Chat</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0f172a;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #chat {
+      width: 100%;
+      max-width: 400px;
+      background: #020617;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    #messages {
+      min-height: 200px;
+      margin-bottom: 10px;
+    }
+    input {
+      width: 70%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background: #22c55e;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div id="chat">
+  <h3>🤖 AI Chat</h3>
+  <div id="messages"></div>
+  <input id="msg" placeholder="Type message..." />
+  <button onclick="send()">Send</button>
+</div>
+
+<script>
+async function send() {
+  const input = document.getElementById("msg");
+  const msg = input.value;
+  if (!msg) return;
+
+  document.getElementById("messages").innerHTML += "<p>👤 " + msg + "</p>";
+  input.value = "";
+
+  const res = await fetch("/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  });
+
+  const data = await res.json();
+  document.getElementById("messages").innerHTML += "<p>🤖 " + data.reply + "</p>";
+}
+</script>
+
+</body>
+</html>
